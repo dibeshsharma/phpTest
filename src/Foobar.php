@@ -1,24 +1,14 @@
 <?php
-namespace Console\Command;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+namespace Console;
 
-
-class foobar extends Command
+class foobar
 {
-    protected function configure()
-    {
-        $this->setName('printNumbers')
-        ->setDescription('Shows current date and time')
-        ->setHelp('This command prints the current date and time');
-    }
-
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function printNumbers()
     {
         $numbers = range(1,100);
         $maxNumber = max($numbers);
+
         foreach ($numbers as $number){
             if(($number % 3 == 0) && ($number % 5 == 0)){
                 if($number == $maxNumber){
@@ -44,9 +34,8 @@ class foobar extends Command
                 }else{
                     echo $number.', ';
                 }
-
             }
         }
-        return Command::SUCCESS;
     }
+
 }

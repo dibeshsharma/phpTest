@@ -16,6 +16,16 @@ if (!empty($sheetData)) {
         $surname = $sheetData[$i][1];
         $email = $sheetData[$i][2];
 
-        $db->query("INSERT INTO USERS(name, surname, email) VALUES('$name', '$surname', '$email')");
+        $name = ucfirst(strtolower($name));
+        $surname = ucfirst(strtolower($surname));
+        $email = filter_var($email, FILTER_VALIDATE_EMAIL);
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $emailErr = "Invalid email format, ";
+            fwrite(STDOUT, $emailErr);
+        }else{
+            $db->query("INSERT INTO USERS(name, surname, email) VALUES('$name', '$surname', '$email')");
+        }
+
     }
 }
