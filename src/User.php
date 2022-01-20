@@ -1,4 +1,9 @@
 <?php
+/*
+ * This code is written by
+ * Programmer/Web Developer
+ * Dibesh Sharma <https://github.com/dibeshsharma>
+ */
 namespace Console;
 use Console\Database\DbHandler;
 
@@ -8,12 +13,23 @@ class User
     private $surname;
     private $email;
 
+    /*
+     * Initialize the property
+     */
+
     public function __construct($name, $surname, $email)
     {
         $this->name = $name;
         $this->surname = $surname;
         $this->email = $email;
     }
+
+    /*
+     * sanitize the data
+     * validate the email
+     * for non-validated email skip the entry
+     * save to the database
+     */
 
     public function save()
     {
@@ -35,7 +51,6 @@ class User
             }
             fwrite(STDOUT, $msg);
         } else {
-            //echo "email is not valid";
             $msg = "Invalid email format \n";
             fwrite(STDOUT, $msg);
         }

@@ -1,4 +1,10 @@
 <?php
+/*
+ * This code is written by
+ * Programmer/Web Developer
+ * Dibesh Sharma <https://github.com/dibeshsharma>
+ */
+
 namespace Console\Command;
 
 error_reporting(0);
@@ -6,19 +12,25 @@ error_reporting(0);
 use Console\User;
 use mysqli;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Console\Database\DbHandler;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Csv;
+
+/*
+ * Command to parse the csv file and insert it to the database:
+ * php console.php app:parse-file --file users.csv -u username -p password --host localhost
+ *
+ * Command to parse the csv file without altering the database
+ * php console.php app:parse-file --file user.csv --dry-run
+ *
+ * for blank password use
+ * php console.php app:parse-file --file users.csv -u username -p " " --host localhost
+ */
 
 class ParseCsvFile extends Command
 {
-    public $projectDir = __DIR__;
-
     protected static $defaultName = 'app:parse-file';
 
     public function __construct()
@@ -45,14 +57,23 @@ class ParseCsvFile extends Command
     {
         $inputOptions = $input->getOptions();
 
+        /*
+         * checks if:
+         * --file [file-name] exists in the upload folder
+         * --file [file-name] is followed by --dry_run, if yes it only runs the script and doesn't insert csv values to the database
+         * --file [file-name] -u username -p password --host localhost, correct credentials are provided
+         */
+
         if(!empty($inputOptions['file'])){
 
-            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+            $reader = new Csv();
 
             if(file_exists("uploads/".$input->getOption('file'))){
                 $spreadsheet = $reader->load("uploads/".$input->getOption('file'));
                 $sheetData = $spreadsheet->getActiveSheet()->toArray();
-
+                /*
+                 * --file [file-name] is followed by --dry_run, only run the script
+                 */
                 if($inputOptions['dry_run'] == null){
                     if (!empty($sheetData)) {
                         for ($i=1; $i<count($sheetData); $i++) { //skipping first row
@@ -67,6 +88,10 @@ class ParseCsvFile extends Command
                         }
                     }
                 } else {
+                    /*
+                     * --file [file-name] -u username -p password --host localhost
+                     * script for no --dry_run
+                     */
                     $username = null;
                     $password = null;
                     $host = null;
@@ -74,6 +99,11 @@ class ParseCsvFile extends Command
                     if(!empty($inputOptions['u'])){
                         $username = $inputOptions['u'];
                     }
+
+                    /*
+                     * Sometimes password can be blank
+                     * Valid for blank password or supplied password
+                     */
 
                     if(!empty($inputOptions['p'])){
                         if (ctype_space($inputOptions['p'])){
@@ -87,10 +117,9 @@ class ParseCsvFile extends Command
                         $host = $inputOptions['host'];
                     }
 
-                    $output->writeln("Username: ".$username);
-                    $output->writeln("Password : ".$password);
-                    $output->writeln("Host : ".$host);
-
+                    /*
+                     * for correct inputs, parse the csv file and insert it to the database                     *
+                     */
                     if(mysqli_connect($host, $username, $password, "php-test")){
                         if (!empty($sheetData)) {
                             for ($i=1; $i<count($sheetData); $i++) { //skipping first row
@@ -103,10 +132,14 @@ class ParseCsvFile extends Command
                             }
                         }
                     } else{
-                        die($output->write("Failed to connect to MySQL: "));
+                        /*
+                         * if the supplied input doesn't match the db credentials
+                         */
+                        die($output->write("Failed to connect to MySQL: Please check the credentials."));
                     }
                 }
             }else{
+                // if file doesn't exist in uploads folder display the message
                 $output->writeln('please upload the file'.$input->getOption('file').' inside the uploads folder and try again.');
             }
         }

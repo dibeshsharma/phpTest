@@ -1,9 +1,17 @@
 <?php
+/*
+ * This code is written by
+ * Programmer/Web Developer
+ * Dibesh Sharma <https://github.com/dibeshsharma>
+ */
 
 namespace Console\Database;
 
 class DbHandler
 {
+    /*
+     * Set your database credentials in this section
+     */
     protected $db_host = 'localhost';
     protected $db_username = 'root';
     protected $db_password = '';
@@ -20,6 +28,9 @@ class DbHandler
         }
     }
 
+    /*
+     * Data sanitization and modification before inserting to the database
+     */
     public function sanitize($data)
     {
         $data = $this->con->real_escape_string($data);
@@ -27,6 +38,9 @@ class DbHandler
         return $data;
     }
 
+    /*
+     * To check if the email is in correct format
+     */
     public function validateEmail($email)
     {
         $email = filter_var($email, FILTER_VALIDATE_EMAIL);

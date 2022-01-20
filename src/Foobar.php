@@ -1,9 +1,21 @@
 <?php
+/*
+ * This code is written by
+ * Programmer/Web Developer
+ * Dibesh Sharma <https://github.com/dibeshsharma>
+ */
 
 namespace Console;
 
 class Foobar
 {
+    /*
+     * Output the numbers from 1 to 100
+     * Where the number is divisible by three (3) output the word “foo”
+     * Where the number is divisible by five (5) output the word “bar”
+     * Where the number is divisible by three (3) and (5) output the word “foobar”
+     */
+
     public function printNumbers()
     {
         $numbers = range(1,100);

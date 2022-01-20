@@ -9,11 +9,16 @@ use Console\Command\ParseCsvFile;
 
 $app = new Application('Console App', 'v1.0.0');
 
-$parseCsvFileCommand = new ParseCsvFile();
+/*
+ * Register the commands
+ * commands are registered here and full commands are:
+ * php console.php PrintNumbers
+ * php console.php create_table
+ * php console.php app:parse-file --file users.csv --dry_run
+ * php console.php app:parse-file --file users.csv -u root -p " " --host localhost
+ */
 
-// Register the commands
-$app->add($parseCsvFileCommand);
-//$app->setDefaultCommand($parseCsvFileCommand->getName(),true);
 $app->add(new PrintNumbersCommand());
 $app->add(new CreateUsersTableCommand());
+$app->add(new ParseCsvFile());
 $app -> run();
