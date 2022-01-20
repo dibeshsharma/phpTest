@@ -77,7 +77,24 @@ How to run the project:
 2) Run the composer.json to get the vendor directory
 3) Set the uploads directory permission (read, write and executable)
 4) put the csv file (users.csv in this case) inside the uploads directory
-5) Go to the root directory of the project (i.e. phpTest>) and run the commands from the scope section above.
+5) update your database credentials in 2 files
+   
+a) phpTest > src > Database > DbHandler.php
+
+Change the code with your MySQL credentials : (line 15-18)
+
+`   protected $db_host = 'localhost';
+   protected $db_username = 'root';
+   protected $db_password = '';
+   protected $db_name = 'php-test';`
+      
+b) phpTest > src > Command > ParseCsvFile.php
+
+Change the "php-test" with your "database_name"  : (line 123)
+
+`if(mysqli_connect($host, $username, $password, "php-test")){`
+
+6) Go to the root directory of the project (i.e. phpTest>) and run the commands from the scope section above.
 
 
 
