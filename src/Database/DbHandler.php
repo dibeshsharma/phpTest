@@ -28,13 +28,23 @@ class DbHandler
         }
     }
 
+    public function authenticate($supplied_host, $supplied_username, $supplied_password)
+    {
+        if($supplied_host == $this->db_host && $supplied_username == $this->db_username && $supplied_password == $this->db_password)
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /*
      * Data sanitization and modification before inserting to the database
      */
     public function sanitize($data)
     {
         $data = $this->con->real_escape_string($data);
-        $data = ucfirst(strtolower($data));
+        $data = strtolower($data);
         return $data;
     }
 
@@ -43,6 +53,10 @@ class DbHandler
      */
     public function validateEmail($email)
     {
+        // Remove all illegal characters from email
+        $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+
+        // Validate e-mail
         $email = filter_var($email, FILTER_VALIDATE_EMAIL);
         return $email;
     }

@@ -9,6 +9,7 @@ namespace Console\Command;
 
 error_reporting(0);
 
+use Console\Database\DbHandler;
 use Console\User;
 use mysqli;
 use Symfony\Component\Console\Command\Command;
@@ -69,6 +70,7 @@ class ParseCsvFile extends Command
             $reader = new Csv();
 
             if(file_exists("uploads/".$input->getOption('file'))){
+                $dbHandler = new DbHandler();
                 $spreadsheet = $reader->load("uploads/".$input->getOption('file'));
                 $sheetData = $spreadsheet->getActiveSheet()->toArray();
                 /*
@@ -81,6 +83,17 @@ class ParseCsvFile extends Command
                             $surname = $sheetData[$i][1];
                             $email = $sheetData[$i][2];
 
+                            //data display sanitization
+                            $name = $dbHandler->sanitize($name);
+                            $name = ucfirst($name);
+
+                            $surname = $dbHandler->sanitize($surname);
+                            $surname = ucfirst($surname);
+
+                            $email = $dbHandler->validateEmail($email);
+                            $email = $dbHandler->sanitize($email);
+
+                            //display data on command console
                             $output->write($name. " ");
                             $output->write($surname. " ");
                             $output->write($email);
@@ -120,7 +133,8 @@ class ParseCsvFile extends Command
                     /*
                      * for correct inputs, parse the csv file and insert it to the database                     *
                      */
-                    if(mysqli_connect($host, $username, $password, "php-test")){
+                    $authenticate = $dbHandler->authenticate($host, $username, $password);
+                    if($authenticate){
                         if (!empty($sheetData)) {
                             for ($i=1; $i<count($sheetData); $i++) { //skipping first row
                                 $name = $sheetData[$i][0];

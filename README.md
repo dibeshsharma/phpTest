@@ -86,13 +86,7 @@ Change the code with your MySQL credentials : (line 15-18)
 `   protected $db_host = 'localhost';
    protected $db_username = 'root';
    protected $db_password = '';
-   protected $db_name = 'php-test';`
-      
-b) phpTest > src > Command > ParseCsvFile.php
-
-Change the "php-test" with your "database_name"  : (line 123)
-
-`if(mysqli_connect($host, $username, $password, "php-test")){`
+   protected $db_name = 'php-test';`  
 
 6) Go to the root directory of the project (i.e. phpTest>) and run the commands from the scope section above.
 

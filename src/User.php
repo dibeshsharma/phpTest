@@ -36,11 +36,13 @@ class User
         $dbHandler = new DbHandler();
 
         $name = $dbHandler->sanitize($this->name);
-        $surname = $dbHandler->sanitize($this->surname);
+        $name = ucfirst($name);
 
-        $email = $dbHandler->sanitize($this->email);
-        $email = $dbHandler->validateEmail($email);
-        $email = strtolower($email);
+        $surname = $dbHandler->sanitize($this->surname);
+        $surname = ucfirst($surname);
+
+        $email = $dbHandler->validateEmail($this->email);
+        $email = $dbHandler->sanitize($email);
 
         if($email){
             $stmt = $dbHandler->con->prepare("Insert into users(name, surname, email) values (?,?,?) ");
@@ -48,11 +50,11 @@ class User
             if($stmt->execute()){
                 $msg = "Data inserted successfully \n";
             }else{
-                $msg = $stmt->error;
+                $msg = $stmt->error. "\n";
             }
             fwrite(STDOUT, $msg);
         } else {
-            $msg = "Invalid email format \n";
+            $msg = "Invalid email format : ".$this->email."\n";
             fwrite(STDOUT, $msg);
         }
 
