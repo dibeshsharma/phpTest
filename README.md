@@ -77,13 +77,11 @@ How to run the project:
 2) Run the composer.json to get the vendor directory
 3) Set the uploads directory permission (read, write and executable)
 4) put the csv file (users.csv in this case) inside the uploads directory
-5) update your database credentials in 2 files
+5) update your database credentials in phpTest > src > Database > DbHandler.php
    
-a) phpTest > src > Database > DbHandler.php
-
 Change the code with your MySQL credentials : (line 15-18)
 
-`   protected $db_host = 'localhost';
+`  protected $db_host = 'localhost';
    protected $db_username = 'root';
    protected $db_password = '';
    protected $db_name = 'php-test';`  
