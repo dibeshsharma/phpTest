@@ -1,26 +1,24 @@
 <?php
-
 namespace Console\Command;
 
-use Console\foobar;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Console\Foobar;
 
-class createUsersTable
+class PrintNumbersCommand extends Command
 {
     protected function configure()
     {
-        $this->setName('--create_table')
-            ->setDescription('Create the users table.')
-            ->setHelp('This command creates the users table.');
+        $this->setName('printNumbers')
+        ->setDescription('Print the numbers')
+        ->setHelp('This command prints the numbers');
     }
 
     protected function execute (InputInterface $input, OutputInterface $output)
     {
-        $foobar = new foobar();
+        $foobar = new Foobar();
         $print = $foobar->printNumbers();
         return Command::SUCCESS;
     }
-
 }

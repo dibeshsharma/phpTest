@@ -1,19 +1,45 @@
 <?php
-
 namespace Console;
-use Console\Database\DbConnection;
+use Console\Database\DbHandler;
 
 class User
 {
-    public function save($name, $surname, $email)
-    {
-        $db = new DbConnection();
-        $name = $db->con->real_escape_string($name);
-        $surname = $db->con->real_escape_string($surname);
-        $email = $db->con->real_escape_string($email);
+    private $name;
+    private $surname;
+    private $email;
 
-        $name = ucfirst(strtolower($name));
-        $surname = ucfirst(strtolower($surname));
-        $email = filter_var($email, FILTER_VALIDATE_EMAIL);
+    public function __construct($name, $surname, $email)
+    {
+        $this->name = $name;
+        $this->surname = $surname;
+        $this->email = $email;
+    }
+
+    public function save()
+    {
+        $dbHandler = new DbHandler();
+
+        $name = $dbHandler->sanitize($this->name);
+        $surname = $dbHandler->sanitize($this->surname);
+
+        $email = $dbHandler->sanitize($this->email);
+        $email = $dbHandler->validateEmail($email);
+
+        if($email){
+            $stmt = $dbHandler->con->prepare("Insert into users(name, surname, email) values (?,?,?) ");
+            $stmt->bind_param("sss", $name, $surname, $email);
+            if($stmt->execute()){
+                $msg = "Data inserted successfully \n";
+            }else{
+                $msg = $stmt->error;
+            }
+            fwrite(STDOUT, $msg);
+        } else {
+            //echo "email is not valid";
+            $msg = "Invalid email format \n";
+            fwrite(STDOUT, $msg);
+        }
+
     }
 }
+

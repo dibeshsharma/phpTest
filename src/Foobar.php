@@ -2,7 +2,7 @@
 
 namespace Console;
 
-class foobar
+class Foobar
 {
     public function printNumbers()
     {

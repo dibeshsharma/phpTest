@@ -2,7 +2,7 @@
 
 namespace Console\Database;
 
-class DbConnection
+class DbHandler
 {
     protected $db_host = 'localhost';
     protected $db_username = 'root';
@@ -18,6 +18,18 @@ class DbConnection
         if($this->con->connect_errno){
             die("Unable to connect database: " . $this->con->connect_errno);
         }
-        echo "Connection Successfull";
+    }
+
+    public function sanitize($data)
+    {
+        $data = $this->con->real_escape_string($data);
+        $data = ucfirst(strtolower($data));
+        return $data;
+    }
+
+    public function validateEmail($email)
+    {
+        $email = filter_var($email, FILTER_VALIDATE_EMAIL);
+        return $email;
     }
 }
