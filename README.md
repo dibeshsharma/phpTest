@@ -54,9 +54,7 @@ for each row insert, success or error messages are being displayed on command co
 
 In above command,
 users.csv is the csv file name that needs to be parsed ( csv file needs to be inside the uploads directory)
---dry_run is the option that parses the csv file, iterate through the CSV rows and print each record to the command console like below:
-
-<img height="100" src="C:\Users\Dibesh\Desktop\userList.JPG" width="100"/>
+--dry_run is the option that parses the csv file, iterate through the CSV rows and print each record to the command console.
 
 Environment and dependencies:
 
