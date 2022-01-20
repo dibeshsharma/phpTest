@@ -1,7 +1,10 @@
 <?php
 namespace Console\Command;
 
+error_reporting(0);
+
 use Console\User;
+use mysqli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -49,6 +52,7 @@ class ParseCsvFile extends Command
             if(file_exists("uploads/".$input->getOption('file'))){
                 $spreadsheet = $reader->load("uploads/".$input->getOption('file'));
                 $sheetData = $spreadsheet->getActiveSheet()->toArray();
+
                 if($inputOptions['dry_run'] == null){
                     if (!empty($sheetData)) {
                         for ($i=1; $i<count($sheetData); $i++) { //skipping first row
@@ -63,15 +67,43 @@ class ParseCsvFile extends Command
                         }
                     }
                 } else {
-                    if (!empty($sheetData)) {
-                        for ($i=1; $i<count($sheetData); $i++) { //skipping first row
-                            $name = $sheetData[$i][0];
-                            $surname = $sheetData[$i][1];
-                            $email = $sheetData[$i][2];
+                    $username = null;
+                    $password = null;
+                    $host = null;
 
-                            $user = new User($name,$surname,$email);
-                            $user->save();
+                    if(!empty($inputOptions['u'])){
+                        $username = $inputOptions['u'];
+                    }
+
+                    if(!empty($inputOptions['p'])){
+                        if (ctype_space($inputOptions['p'])){
+                            $password = "";
+                        }else{
+                            $password = $inputOptions['p'];
                         }
+                    }
+
+                    if(!empty($inputOptions['host'])){
+                        $host = $inputOptions['host'];
+                    }
+
+                    $output->writeln("Username: ".$username);
+                    $output->writeln("Password : ".$password);
+                    $output->writeln("Host : ".$host);
+
+                    if(mysqli_connect($host, $username, $password, "php-test")){
+                        if (!empty($sheetData)) {
+                            for ($i=1; $i<count($sheetData); $i++) { //skipping first row
+                                $name = $sheetData[$i][0];
+                                $surname = $sheetData[$i][1];
+                                $email = $sheetData[$i][2];
+
+                                $user = new User($name,$surname,$email);
+                                $user->save();
+                            }
+                        }
+                    } else{
+                        die($output->write("Failed to connect to MySQL: "));
                     }
                 }
             }else{
