@@ -40,6 +40,7 @@ class User
 
         $email = $dbHandler->sanitize($this->email);
         $email = $dbHandler->validateEmail($email);
+        $email = strtolower($email);
 
         if($email){
             $stmt = $dbHandler->con->prepare("Insert into users(name, surname, email) values (?,?,?) ");

@@ -38,9 +38,9 @@ class CreateUsersTableCommand extends Command
         $dbHandler = new DbHandler();
         $sql = "CREATE TABLE `php-test`.`users` ( `name` VARCHAR(255) NOT NULL , `surname` VARCHAR(255) NOT NULL , `email` VARCHAR(255) NOT NULL , UNIQUE `email` (`email`)) ENGINE = InnoDB";
         if ($dbHandler->con->query($sql) === TRUE) {
-            echo "Database created successfully";
+            echo "Users table created successfully";
         } else {
-            echo "Error creating database: " . $dbHandler->con->error;
+            echo "Error creating users table: " . $dbHandler->con->error;
         }
         return Command::SUCCESS;
     }
