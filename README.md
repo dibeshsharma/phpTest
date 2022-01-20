@@ -56,26 +56,20 @@ In above command,
 users.csv is the csv file name that needs to be parsed ( csv file needs to be inside the uploads directory)
 --dry_run is the option that parses the csv file, iterate through the CSV rows and print each record to the command console like below:
 
-John smith jsmith@gmail.com
-------------------------------------
-HaMish JONES ham@seek.com
-------------------------------------
-Phil  CARRY    phil@open.edu.au
-------------------------------------
-Johnny O'Hare john@yahoo.com.au
-------------------------------------
+<img height="100" src="C:\Users\Dibesh\Desktop\userList.JPG" width="100"/>
 
 Environment and dependencies:
 
-The project uses the following dependecies 
-"phpoffice/phpspreadsheet": "^1.21",
-"symfony/console": "^6.0",
-"ext-mysqli": "*"
-The namespace conventions are psr-4 standard
+The project uses the following dependencies :
+1) "phpoffice/phpspreadsheet": "^1.21",
+2) "symfony/console": "^6.0",
+3) "ext-mysqli": "*"
+
+The namespace conventions are psr-4 standard.
 The dependencies can be found in composer.json file. 
 
 The vendor directory is ignored. 
-composer.json needs to be run to get the vendor directory for the project.
+Run composer.json to get the dependencies (vendor directory)
 
 uploads directory is the directory where the csv file that needs to be parsed are placed.
 Executable permissions for uploads directory needs to be set prior to run the project.
